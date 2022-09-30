@@ -1,0 +1,45 @@
+# version docker compose
+version: '2.10.2'
+services:
+  elasticsearch:
+    image: elasticsearch:8.4.1
+    environment:
+        # Un único nodo (no vamos a replicar la información)
+      - discovery.type=single-node
+        # Memoria minima y maxima
+      - ES_JAVA_OPTS=-Xms1g -Xmx1g
+      - xpack.security.enabled=true
+      - ELASTIC_PASSWORD=elastic
+    volumes:
+        # Montamos le volumen de datos
+      - es_data:/usr/share/elasticsearch/data
+    ports:
+      - 9200:9200
+      # - target: 9200
+      #   published: 9200
+    networks:
+      - elastic
+    # Quitamos el límite de memoria del contenedor
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+
+  kibana:
+    image: kibana:8.4.1
+    ports:
+      - target: 5601
+        published: 5601
+    depends_on:
+      - elasticsearch
+    networks:
+      - elastic      
+
+volumes:
+  es_data:
+    driver: local
+
+networks:
+  elastic:
+    name: elastic
+    driver: bridge
