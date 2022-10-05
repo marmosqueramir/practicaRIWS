@@ -1,7 +1,7 @@
 import scrapy
 
 
-class FootballScore(scrapy.Item):
+class FootballScoreItem(scrapy.Item):
     homeTeam = scrapy.Field()
     homeScore = scrapy.Field()
     homeShield = scrapy.Field()
@@ -9,3 +9,4 @@ class FootballScore(scrapy.Item):
     awayScore = scrapy.Field()
     awayShield = scrapy.Field()
     matchDay = scrapy.Field()
+    matchSStadium = scrapy.Field()
