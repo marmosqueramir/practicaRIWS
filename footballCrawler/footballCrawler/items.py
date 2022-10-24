@@ -10,3 +10,4 @@ class FootballScoreItem(scrapy.Item):
     awayShield = scrapy.Field()
     matchDay = scrapy.Field()
     matchSStadium = scrapy.Field()
+    matchResult = scrapy.Field()

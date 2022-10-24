@@ -1,4 +1,5 @@
 import scrapy
+from footballCrawler.items import FootballScoreItem
 
 
 class AuthorSpider(scrapy.Spider):
@@ -20,16 +21,17 @@ class AuthorSpider(scrapy.Spider):
         def extract_with_css_math_result(query):
             return response.css(query).getall()
         
-        yield {
-            'homeTeam': extract_with_css_home_team('div.alineaciontitle h3 a::text'),
-            'homeScore': extract_with_css_home_team('.claseR::text'),
-            'homeShield': extract_with_css_home_team('.team-logo img::attr(src)'),
+        match_item = FootballScoreItem()
+        match_item['homeTeam']= extract_with_css_home_team('div.alineaciontitle h3 a::text')
+        match_item['homeScore']= extract_with_css_home_team('.claseR::text'),
+        match_item['homeShield']= extract_with_css_home_team('.team-logo img::attr(src)'),
 
-            'awayTeam': extract_with_css_away_team('div.alineaciontitle h3 a::text'),
-            'awayScore': extract_with_css_away_team('.claseR::text'),
-            'awayShield': extract_with_css_away_team('.team-logo img::attr(src)'),
-            
-            'matchDay': extract_with_css_home_team('.report-resume-header tbody tr th b::text'),
-            'matchSStadium': extract_with_css_home_team('.stadium b::text'),
-            'matchResult': extract_with_css_math_result('.claseR::text'),
-        }
+        match_item['awayTeam']= extract_with_css_away_team('div.alineaciontitle h3 a::text'),
+        match_item['awayScore']= extract_with_css_away_team('.claseR::text'),
+        match_item['awayShield']= extract_with_css_away_team('.team-logo img::attr(src)'),
+
+        match_item['matchDay']= extract_with_css_home_team('.report-resume-header tbody tr th b::text'),
+        match_item['matchSStadium']= extract_with_css_home_team('.stadium b::text'),
+        match_item['matchResult']= extract_with_css_math_result('.claseR::text'),
+
+        yield match_item
