@@ -42,8 +42,11 @@ class AuthorSpider(scrapy.Spider):
             #SE HA PUESTO LA ETIQUETA 'FICHA' porque ahora mismo no esta, supongo que es porque termino el 
                 #partido hace poco
         
-        #La jornada 13 y la 17 si pinchas en los partidos los html cambian
+        #La jornada 13 y la 17 (o 18) si pinchas en los partidos los html cambian
             #en el resultado, a veces pone [-, -] y otras pone la hora
+        #Ejemplos de htmls distintos:
+            #Jornada 13: https://www.resultados-futbol.com/partido/Celta/Osasuna
+            #Jornada 18: https://www.resultados-futbol.com/partido/Villarreal/Girona-Fc
         match_item = FootballScoreItem()
         match_item['homeTeam']= extract_with_css_team('div.performers div.team.equipo1 h2 a b::text')
         match_item['homeScore']= extract_with_css_team('.claseR::text')
