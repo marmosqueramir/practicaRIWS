@@ -38,15 +38,9 @@ class AuthorSpider(scrapy.Spider):
                 return response.css(query).getall()
             else:
                 return None
-        #COMPROBAR QUE EN ESTE ENLACE: https://www.resultados-futbol.com/partido/Valencia-Cf/Barcelona
-            #SE HA PUESTO LA ETIQUETA 'FICHA' porque ahora mismo no esta, supongo que es porque termino el 
-                #partido hace poco
-        
-        #La jornada 13 y la 17 (o 18) si pinchas en los partidos los html cambian
-            #en el resultado, a veces pone [-, -] y otras pone la hora
-        #Ejemplos de htmls distintos:
-            #Jornada 13: https://www.resultados-futbol.com/partido/Celta/Osasuna
-            #Jornada 18: https://www.resultados-futbol.com/partido/Villarreal/Girona-Fc
+        def extract_with_css_league(query):
+            return response.css(query)[1].get()
+
         match_item = FootballScoreItem()
         match_item['homeTeam']= extract_with_css_team('div.performers div.team.equipo1 h2 a b::text')
         match_item['homeScore']= extract_with_css_team('.claseR::text')
@@ -59,6 +53,7 @@ class AuthorSpider(scrapy.Spider):
         match_item['matchDay']= extract_with_css_team('div.with_info div.performers span.jor-date::text')
         match_item['matchSStadium']= extract_with_css_team('.stadium b::text')
         match_item['matchResult']= extract_with_css_math_result('.claseR::text')
+        match_item['league']= extract_with_css_league('div.microformat.itemscope ul a::text')
 
         yield match_item
 

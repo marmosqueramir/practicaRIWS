@@ -11,3 +11,4 @@ class FootballScoreItem(scrapy.Item):
     matchDay = scrapy.Field()
     matchSStadium = scrapy.Field()
     matchResult = scrapy.Field()
+    league = scrapy.Field()
