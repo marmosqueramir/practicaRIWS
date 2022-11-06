@@ -12,3 +12,12 @@ class FootballScoreItem(scrapy.Item):
     matchSStadium = scrapy.Field()
     matchResult = scrapy.Field()
     league = scrapy.Field()
+    journey = scrapy.Field()
+
+class FootballPlayer(scrapy.Item):
+    ranking = scrapy.Field()
+    name = scrapy.Field()
+    goals = scrapy.Field()
+    position = scrapy.Field()
+    teamName = scrapy.Field()
+    league = scrapy.Field()

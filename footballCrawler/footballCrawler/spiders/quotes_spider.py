@@ -1,7 +1,24 @@
 import scrapy
 from footballCrawler.items import FootballScoreItem
+from footballCrawler.items import FootballPlayer
 
-class AuthorSpider(scrapy.Spider):
+class PlayerSpider(scrapy.Spider):
+    name = 'players'
+    start_urls = ['https://www.resultados-futbol.com/primera/grupo1/jornada1', 'https://www.resultados-futbol.com/primera_division_rfef/grupo1/jornada1']
+
+    def parse(self, response):
+        league = response.css('div.clearfix div.titular-data h1::text').get()
+        for player in response.css("div.gridPlayers tr.fila"):
+            football_player = FootballPlayer()
+            football_player['ranking'] = player.css('td::text').get()
+            football_player['name'] = player.css('td a::text').get()
+            football_player['goals'] = player.css('td strong::text').get()
+            football_player['position'] = player.css('td.role::text').get()
+            football_player['teamName'] = player.css('td.esp a::text').get()
+            football_player['league'] = league
+
+            yield football_player
+class MatchSpider(scrapy.Spider):
     name = 'matchpoints'
     start_urls = ['https://www.resultados-futbol.com/primera/grupo1/jornada1', 'https://www.resultados-futbol.com/primera_division_rfef/grupo1/jornada1']
 
@@ -40,6 +57,8 @@ class AuthorSpider(scrapy.Spider):
                 return None
         def extract_with_css_league(query):
             return response.css(query)[1].get()
+        def extract_with_css_journey(query):
+            return response.css(query).get()
 
         match_item = FootballScoreItem()
         match_item['homeTeam']= extract_with_css_team('div.performers div.team.equipo1 h2 a b::text')
@@ -54,6 +73,6 @@ class AuthorSpider(scrapy.Spider):
         match_item['matchSStadium']= extract_with_css_team('.stadium b::text')
         match_item['matchResult']= extract_with_css_math_result('.claseR::text')
         match_item['league']= extract_with_css_league('div.microformat.itemscope ul a::text')
-
+        match_item['journey']= extract_with_css_journey('.jornada a::text')
         yield match_item
 
