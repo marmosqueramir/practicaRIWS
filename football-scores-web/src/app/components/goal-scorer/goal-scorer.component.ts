@@ -20,6 +20,14 @@ export class GoalScorerComponent implements OnInit {
 
   goalScorerItems: GoalScorerItems[] = [];
 
+  displayedColumns: string[] = [
+    'ranking',
+    'name',
+    'goals',
+    'position',
+    'teamName',
+  ];
+
   constructor(
     private _fb: FormBuilder
   ) { }
@@ -29,6 +37,26 @@ export class GoalScorerComponent implements OnInit {
   }
 
   searchResults() {
+    var jugador: GoalScorerItems = {
+      ranking: 1,
+      name: 'Jorge Berbel',
+      goals: 339,
+      position : "DevOps",
+      teamName : "Deportivo",
+      league : "Española"
+    }
+
+    var jugador2: GoalScorerItems = {
+      ranking: 2,
+      name : "Pablo",
+      goals : 200,
+      position : "DevOps",
+      teamName : "Deportivo",
+      league : "Española"
+    }
+
+    this.goalScorerItems.push(jugador);
+    this.goalScorerItems.push(jugador2);
     console.log(this.selectedLeague)
     // asignar el valor a goalScorerItems
   }

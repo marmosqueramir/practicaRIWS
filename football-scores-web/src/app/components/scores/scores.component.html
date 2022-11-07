@@ -1,3 +1,4 @@
+<h1 style="text-align: center;"> Resultados Ligas </h1>
 <div class="container" style="width: 100%; text-align: center;">
     <div class="column">
         <form [formGroup]="resultForm">
@@ -23,8 +24,11 @@
                 </mat-form-field>
             </div>
         </form>
+
+        <!-- Botón para buscar -->
         <button mat-raised-button color="primary" (click)="searchResults()" [disabled]="!selectedLeague || !selectedJourney"> Buscar </button>
 
+        <!-- Datos de los partidos -->
         <mat-card style="margin-top: 10px;" *ngIf="footballScoreItems.length > 0">
             <mat-table
             [dataSource]="footballScoreItems"
@@ -105,7 +109,5 @@
           <mat-row *matRowDef="let row; columns: displayedColumns" class="item" matRipple></mat-row>
           </mat-table>
         </mat-card>
-        
-
     </div>
 </div>

@@ -1,3 +1,4 @@
+<h1 style="text-align: center;"> Goleadores </h1>
 <div class="container" style="width: 100%; text-align: center;">
     <div class="column">
         <form [formGroup]="goalScorerForm">
@@ -14,8 +15,69 @@
             </div>
         </form>
 
+        <!-- Botón para buscar -->
         <button mat-raised-button color="primary" (click)="searchResults()" [disabled]="!selectedLeague"> Buscar </button>
 
-        <h1> aqui poñer a tabla cos xogadores</h1>
+        <!-- Datos de los goleadores -->
+        <mat-card style="margin-top: 10px;" *ngIf="goalScorerItems.length > 0">
+            <mat-table
+            [dataSource]="goalScorerItems"
+            matSort
+            class="items-table">
+
+          <!-- Posición -->
+          <ng-container matColumnDef="ranking">
+            <mat-header-cell id="ranking" mat-sort-header *matHeaderCellDef>
+              Posición
+            </mat-header-cell>
+            <mat-cell *matCellDef="let element">
+              {{ element.ranking }}
+            </mat-cell>
+          </ng-container>
+
+          <!-- Nombre del jugador -->
+          <ng-container matColumnDef="name">
+            <mat-header-cell id="name" mat-sort-header *matHeaderCellDef>
+              Nombre
+            </mat-header-cell>
+            <mat-cell *matCellDef="let element">
+              {{ element.name }}
+            </mat-cell>
+          </ng-container>
+
+          <!-- Número de goles -->
+          <ng-container matColumnDef="goals">
+            <mat-header-cell id="goals" mat-sort-header *matHeaderCellDef>
+              Nº Goles
+            </mat-header-cell>
+            <mat-cell *matCellDef="let element">
+              {{ element.goals }}
+            </mat-cell>
+          </ng-container>
+
+          <!-- Posición -->
+          <ng-container matColumnDef="position">
+            <mat-header-cell id="position" mat-sort-header *matHeaderCellDef>
+              Posición
+            </mat-header-cell>
+            <mat-cell *matCellDef="let element">
+              {{ element.position }}
+            </mat-cell>
+          </ng-container>
+
+          <!-- Nombre del equipo -->
+          <ng-container matColumnDef="teamName">
+            <mat-header-cell id="teamName" mat-sort-header *matHeaderCellDef>
+              Equipo
+            </mat-header-cell>
+            <mat-cell *matCellDef="let element">
+              {{ element.teamName }}
+            </mat-cell>
+          </ng-container>
+
+          <mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></mat-header-row>
+          <mat-row *matRowDef="let row; columns: displayedColumns" class="item" matRipple></mat-row>
+          </mat-table>
+        </mat-card>
     </div>
 </div>
