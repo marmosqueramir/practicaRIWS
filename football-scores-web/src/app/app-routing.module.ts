@@ -6,7 +6,11 @@ const routes: Routes = [
   {
     path: '',
     component: ScoresComponent
-  }
+  },
+  // {
+  //   path: 'ejemplo',
+  //   component: ScoresComponent
+  // }
 ];
 
 @NgModule({
