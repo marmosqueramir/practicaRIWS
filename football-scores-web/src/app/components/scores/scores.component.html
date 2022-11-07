@@ -15,7 +15,7 @@
                 <!-- Campo para elegir jornada -->
                 <mat-form-field class="example-full-width" appearance="outline">
                     <mat-label>Seleccione una jornada</mat-label>
-                    <mat-select formControlName="journey" [(value)]="selectedLeague" placeholder="selectedJourney">
+                    <mat-select formControlName="journey" [(value)]="selectedJourney" placeholder="selectedJourney">
                         <mat-option [value]="journey" *ngFor="let journey of availableJourneys">
                             {{ journey }}
                         </mat-option>
@@ -23,6 +23,7 @@
                 </mat-form-field>
             </div>
         </form>
+        <button mat-raised-button color="primary" (click)="searchResults()" [disabled]="!selectedLeague || !selectedJourney"> Buscar </button>
 
         <h1> aqui poñer a tabla cos partidos</h1>
 
