@@ -25,10 +25,87 @@
         </form>
         <button mat-raised-button color="primary" (click)="searchResults()" [disabled]="!selectedLeague || !selectedJourney"> Buscar </button>
 
-        <h1> aqui poñer a tabla cos partidos</h1>
-        <div class="col-md-4 mt-1" *ngFor="let score of footballScoreItems; let i = index">
-            
-        </div>
+        <mat-card style="margin-top: 10px;" *ngIf="footballScoreItems.length > 0">
+            <mat-table
+            [dataSource]="footballScoreItems"
+            matSort
+            class="items-table">
+
+          <!-- Día del partido -->
+          <ng-container matColumnDef="matchDay">
+            <mat-header-cell id="matchDay" mat-sort-header *matHeaderCellDef>
+              Fecha
+            </mat-header-cell>
+            <mat-cell *matCellDef="let element">
+              {{ element.matchDay }}
+            </mat-cell>
+          </ng-container>
+
+          <!-- Equipo local -->
+          <ng-container matColumnDef="homeTeam">
+            <mat-header-cell id="homeTeam" mat-sort-header *matHeaderCellDef>
+              Equipo Local
+            </mat-header-cell>
+            <mat-cell *matCellDef="let element">
+                <img
+                    class="photo"
+                    [src]="element.homeShield"
+                    alt="photo"
+                    width="20"
+                    height="20"
+                    style="margin-right: 5px;"/>
+              {{ element.homeTeam }}
+            </mat-cell>
+          </ng-container>
+
+          <!-- Resultado -->
+          <ng-container matColumnDef="matchResult">
+            <mat-header-cell id="matchResult" mat-sort-header *matHeaderCellDef>
+              Resultado
+            </mat-header-cell>
+            <mat-cell *matCellDef="let element">
+              {{ element.homeScore + '-' + element.awayScore }}
+            </mat-cell>
+          </ng-container>
+
+          <!-- Equipo visitante -->
+          <ng-container matColumnDef="awayTeam">
+            <mat-header-cell id="awayTeam" mat-sort-header *matHeaderCellDef>
+              Equipo Visitante
+            </mat-header-cell>
+            <mat-cell *matCellDef="let element">
+              {{ element.awayTeam }}
+              <img
+                class="photo"
+                [src]="element.awayShield"
+                alt="photo"
+                width="20"
+                height="20"
+                style="margin-left: 5px;"/>
+            </mat-cell>
+          </ng-container>
+
+          <!-- Equipo visitante -->
+          <ng-container matColumnDef="actions">
+            <mat-header-cell id="actions" mat-sort-header *matHeaderCellDef>
+              Acciones
+            </mat-header-cell>
+            <mat-cell *matCellDef="let element">
+                <button
+                mat-icon-button
+                title="Ver detalles"
+                (click)="viewDetails(element)"
+              >
+                <mat-icon>visibility</mat-icon>
+              </button>
+            </mat-cell>
+          </ng-container>
+
+          <mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></mat-header-row>
+          <mat-row *matRowDef="let row; columns: displayedColumns" class="item" matRipple></mat-row>
+          </mat-table>
+        </mat-card>
+        
 
     </div>
 </div>

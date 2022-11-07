@@ -23,6 +23,14 @@ export class ScoresComponent implements OnInit {
 
   footballScoreItems: FootballScoreItem[] = [];
 
+  displayedColumns: string[] = [
+    'matchDay',
+    'homeTeam',
+    'matchResult',
+    'awayTeam',
+    'actions',
+  ];
+
   constructor(
     private _fb: FormBuilder
   ) { }
@@ -42,6 +50,40 @@ export class ScoresComponent implements OnInit {
   searchResults() {
     console.log(this.selectedJourney)
     console.log(this.selectedLeague)
+    var resultado1: FootballScoreItem = {
+      homeTeam: 'Barcelona',
+      homeScore: 0,
+      homeShield: 'https://t.resfu.com/img_data/escudos/small/429.jpg?size=37x&5',
+      awayTeam: 'Madrid',
+      awayScore: 2,
+      awayShield: 'https://t.resfu.com/img_data/escudos/small/429.jpg?size=37x&5',
+      matchDay: undefined,
+      matchStadium: undefined,
+      matchResult: undefined,
+      league: 'Española',
+      journey: 'Jornada 1'
+    }
+    var resultado2: FootballScoreItem = {
+      homeTeam: 'Barcelona',
+      homeScore: 0,
+      homeShield: 'https://t.resfu.com/img_data/escudos/small/429.jpg?size=37x&5',
+      awayTeam: 'Madrid',
+      awayScore: 2,
+      awayShield: 'https://t.resfu.com/img_data/escudos/small/429.jpg?size=37x&5',
+      matchDay: undefined,
+      matchStadium: undefined,
+      matchResult: undefined,
+      league: 'Española',
+      journey: 'Jornada 1'
+    }
+
+    this.footballScoreItems.push(resultado1)
+    this.footballScoreItems.push(resultado2);
     // asignar el valor a footballScoreItems
+
+  }
+
+  viewDetails(element: any): void {
+
   }
 }
