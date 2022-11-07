@@ -1,0 +1,21 @@
+<div class="container" style="width: 100%; text-align: center;">
+    <div class="column">
+        <form [formGroup]="goalScorerForm">
+            <div class="row">
+                <!-- Campo para elegir liga -->
+                <mat-form-field class="example-full-width" appearance="outline" style="margin-right: 10px; margin-top: 10px;">
+                    <mat-label>Seleccione una liga</mat-label>
+                    <mat-select formControlName="league" [(value)]="selectedLeague" placeholder="selectedLeague">
+                        <mat-option [value]="league" *ngFor="let league of availableLeagues">
+                            {{ league }}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+        </form>
+
+        <button mat-raised-button color="primary" (click)="searchResults()" [disabled]="!selectedLeague"> Buscar </button>
+
+        <h1> aqui poñer a tabla cos xogadores</h1>
+    </div>
+</div>

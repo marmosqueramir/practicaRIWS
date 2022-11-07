@@ -3,7 +3,7 @@
         <form [formGroup]="resultForm">
             <div class="row">
                 <!-- Campo para elegir liga -->
-                <mat-form-field class="example-full-width" appearance="outline" style="margin-right: 10px;">
+                <mat-form-field class="example-full-width" appearance="outline" style="margin-right: 10px; margin-top: 10px;">
                     <mat-label>Seleccione una liga</mat-label>
                     <mat-select formControlName="league" [(value)]="selectedLeague" placeholder="selectedLeague" (selectionChange)="leagueSelected($event)">
                         <mat-option [value]="league" *ngFor="let league of availableLeagues">
@@ -13,7 +13,7 @@
                 </mat-form-field>
     
                 <!-- Campo para elegir jornada -->
-                <mat-form-field class="example-full-width" appearance="outline">
+                <mat-form-field class="example-full-width" appearance="outline" style="margin-top: 10px;">
                     <mat-label>Seleccione una jornada</mat-label>
                     <mat-select formControlName="journey" [(value)]="selectedJourney" placeholder="selectedJourney">
                         <mat-option [value]="journey" *ngFor="let journey of availableJourneys">
@@ -26,6 +26,9 @@
         <button mat-raised-button color="primary" (click)="searchResults()" [disabled]="!selectedLeague || !selectedJourney"> Buscar </button>
 
         <h1> aqui poñer a tabla cos partidos</h1>
+        <div class="col-md-4 mt-1" *ngFor="let score of footballScoreItems; let i = index">
+            
+        </div>
 
     </div>
 </div>

@@ -42,5 +42,6 @@ export class ScoresComponent implements OnInit {
   searchResults() {
     console.log(this.selectedJourney)
     console.log(this.selectedLeague)
+    // asignar el valor a footballScoreItems
   }
 }

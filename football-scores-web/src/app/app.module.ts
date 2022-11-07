@@ -10,12 +10,14 @@ import {MatFormFieldModule} from '@angular/material/form-field';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {MatInputModule} from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
+import { GoalScorerComponent } from './components/goal-scorer/goal-scorer.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     ScoresComponent,
-    NavbarComponent
+    NavbarComponent,
+    GoalScorerComponent
   ],
   imports: [
     BrowserModule,

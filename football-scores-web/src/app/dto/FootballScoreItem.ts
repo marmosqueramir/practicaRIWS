@@ -11,3 +11,12 @@ export interface FootballScoreItem {
     league: String;
     journey: String;
 }
+
+export interface GoalScorerItems {
+    ranking: number;
+    name: String;
+    goals: number;
+    position: String;
+    teamName: String;
+    league: String;
+}
