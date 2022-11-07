@@ -1,25 +1,30 @@
-<div class="container" style="width: 100%">
-    <form [formGroup]="resultForm">
-        <div fxLayout="row">
-            <!-- Campo para elegir liga -->
-            <mat-form-field class="example-full-width" appearance="outline">
-                <mat-label>Seleccione una liga</mat-label>
-                <mat-select formControlName="league" [(value)]="selectedLeague" placeholder="selectedLeague">
-                    <mat-option [value]="league" *ngFor="let league of availableLeagues">
-                        {{ league }}
-                    </mat-option>
-                </mat-select>
-            </mat-form-field>
+<div class="container" style="width: 100%; text-align: center;">
+    <div class="column">
+        <form [formGroup]="resultForm">
+            <div class="row">
+                <!-- Campo para elegir liga -->
+                <mat-form-field class="example-full-width" appearance="outline" style="margin-right: 10px;">
+                    <mat-label>Seleccione una liga</mat-label>
+                    <mat-select formControlName="league" [(value)]="selectedLeague" placeholder="selectedLeague" (selectionChange)="leagueSelected($event)">
+                        <mat-option [value]="league" *ngFor="let league of availableLeagues">
+                            {{ league }}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+    
+                <!-- Campo para elegir jornada -->
+                <mat-form-field class="example-full-width" appearance="outline">
+                    <mat-label>Seleccione una jornada</mat-label>
+                    <mat-select formControlName="journey" [(value)]="selectedLeague" placeholder="selectedJourney">
+                        <mat-option [value]="journey" *ngFor="let journey of availableJourneys">
+                            {{ journey }}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+        </form>
 
-            <!-- Campo para elegir jornada -->
-            <mat-form-field class="example-full-width" appearance="outline">
-                <mat-label>Seleccione una jornada</mat-label>
-                <mat-select formControlName="journey" [(value)]="selectedLeague" placeholder="selectedJourney">
-                    <mat-option [value]="journey" *ngFor="let journey of availableJourneys">
-                        {{ journey }}
-                    </mat-option>
-                </mat-select>
-            </mat-form-field>
-        </div>
-    </form>
+        <h1> aqui poñer a tabla cos partidos</h1>
+
+    </div>
 </div>
