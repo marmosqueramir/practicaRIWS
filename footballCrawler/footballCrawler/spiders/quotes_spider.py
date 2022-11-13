@@ -41,6 +41,7 @@ mapping_player = {
         }
     }
 }
+cont = 0
 es.indices.delete(index='matchplayer', ignore=[400, 404])
 es.indices.create(index = 'matchplayer', body = mapping_player)
 es.delete_by_query(index='matchplayer', body={"query": {"match_all": {}}})
@@ -56,7 +57,7 @@ class PlayerSpider(scrapy.Spider):
     start_urls = ['https://www.resultados-futbol.com/primera/grupo1/jornada1', 'https://www.resultados-futbol.com/primera_division_rfef/grupo1/jornada1']
 
     def parse(self, response):
-        cont = 0
+        global cont
         league = response.css('div.clearfix div.titular-data h1::text').get()
         for player in response.css("div.gridPlayers tr.fila"):
             football_player = FootballPlayer()
@@ -78,10 +79,11 @@ class PlayerSpider(scrapy.Spider):
             football_player['teamName'] = limpiar_acentos(player.css('td.esp a::text').get())
             football_player['league'] = limpiar_acentos(league)
             cont=cont+1
+
             #yield football_player
             res = es.index(index='matchplayer', document=_encoder.encode(football_player), id=football_player['id'])
-
             print(res['result'])
+
 class MatchSpider(scrapy.Spider):
     name = 'matchpoints'
     start_urls = ['https://www.resultados-futbol.com/primera/grupo1/jornada1', 'https://www.resultados-futbol.com/primera_division_rfef/grupo1/jornada1']
