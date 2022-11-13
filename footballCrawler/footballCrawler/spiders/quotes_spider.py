@@ -1,23 +1,87 @@
 import scrapy
 from footballCrawler.items import FootballScoreItem
 from footballCrawler.items import FootballPlayer
+from elasticsearch import Elasticsearch
+from elasticsearch.serializer import JSONSerializer
+from scrapy.utils.serialize import ScrapyJSONEncoder
+
+es = Elasticsearch([{'host': 'localhost', 'port': 9200, 'use_ssl': False}], http_auth=('elastic', 'elastic'), timeout=300)
+_encoder = ScrapyJSONEncoder()
+
+mapping_match = {
+    "mappings": {
+        "properties": {
+            "homeTeam": {"type": "text"},
+            "homeScore": {"type": "integer"},
+            "homeShield": {"type": "text"},
+            "awayTeam": {"type": "text"},
+            "awayScore": {"type": "integer"},
+            "awayShield": {"type": "text"},
+            "matchDay": {"type": "date"},
+            "matchSStadium": {"type": "text"},
+            "league": {"type": "text"},
+            "journey": {"type": "text"}
+        }
+    }
+}
+mapping_player = {
+    "settings": {
+        "number_of_shards": 1,
+        "number_of_replicas": 2
+    },
+    "mappings": {
+        "properties": {
+            "id": {"type": "text"},
+            "ranking": {"type": "text"},
+            "name": {"type": "text"},
+            "goals": {"type": "text"},
+            "position": {"type": "text"},
+            "teamName": {"type": "text"},
+            "league": {"type": "text"}
+        }
+    }
+}
+es.indices.delete(index='matchplayer', ignore=[400, 404])
+es.indices.create(index = 'matchplayer', body = mapping_player)
+es.delete_by_query(index='matchplayer', body={"query": {"match_all": {}}})
+def limpiar_acentos(text):
+	acentos = {'á': 'a', 'é': 'e', 'í': 'i', 'ó': 'o', 'ú': 'u', 'Á': 'A', 'E': 'E', 'Í': 'I', 'Ó': 'O', 'Ú': 'U'}
+	for acen in acentos:
+		if acen in text:
+			text = text.replace(acen, acentos[acen])
+	return text
 
 class PlayerSpider(scrapy.Spider):
     name = 'players'
     start_urls = ['https://www.resultados-futbol.com/primera/grupo1/jornada1', 'https://www.resultados-futbol.com/primera_division_rfef/grupo1/jornada1']
 
     def parse(self, response):
+        cont = 0
         league = response.css('div.clearfix div.titular-data h1::text').get()
         for player in response.css("div.gridPlayers tr.fila"):
             football_player = FootballPlayer()
+            #other option
+            doc =  {
+                'id': str(cont),
+                'ranking' : player.css('td::text').get(),
+                'name' : player.css('td a::text').get(),
+                'goals' : player.css('td strong::text').get(),
+                'position' : player.css('td.role::text').get(),
+                'teamName' : player.css('td.esp a::text').get(),
+                'league' : league
+            }
+            football_player['id'] = cont
             football_player['ranking'] = player.css('td::text').get()
-            football_player['name'] = player.css('td a::text').get()
+            football_player['name'] = limpiar_acentos(player.css('td a::text').get())
             football_player['goals'] = player.css('td strong::text').get()
             football_player['position'] = player.css('td.role::text').get()
-            football_player['teamName'] = player.css('td.esp a::text').get()
-            football_player['league'] = league
+            football_player['teamName'] = limpiar_acentos(player.css('td.esp a::text').get())
+            football_player['league'] = limpiar_acentos(league)
+            cont=cont+1
+            #yield football_player
+            res = es.index(index='matchplayer', document=_encoder.encode(football_player), id=football_player['id'])
 
-            yield football_player
+            print(res['result'])
 class MatchSpider(scrapy.Spider):
     name = 'matchpoints'
     start_urls = ['https://www.resultados-futbol.com/primera/grupo1/jornada1', 'https://www.resultados-futbol.com/primera_division_rfef/grupo1/jornada1']

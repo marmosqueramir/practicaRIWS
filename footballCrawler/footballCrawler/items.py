@@ -15,6 +15,7 @@ class FootballScoreItem(scrapy.Item):
     journey = scrapy.Field()
 
 class FootballPlayer(scrapy.Item):
+    id = scrapy.Field()
     ranking = scrapy.Field()
     name = scrapy.Field()
     goals = scrapy.Field()
