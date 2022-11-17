@@ -46,13 +46,14 @@ mapping_player = {
 }
 cont = 0
 contMatch = 0
-es.indices.delete(index='matchplayer', ignore=[400, 404])
-es.indices.create(index = 'matchplayer', body = mapping_player)
-es.delete_by_query(index='matchplayer', body={"query": {"match_all": {}}})
 
-es.indices.delete(index='match', ignore=[400, 404])
-es.indices.create(index = 'match', body = mapping_match)
-es.delete_by_query(index='match', body={"query": {"match_all": {}}})
+def es_create_index_if_not_exists(es, index, mapping):
+    
+    if es.indices.exists(index=index):
+        print('Index already created:' , index)
+    else:
+        es.indices.create(index = index, body = mapping)
+
 def limpiar_acentos(text):
 	acentos = {'á': 'a', 'é': 'e', 'í': 'i', 'ó': 'o', 'ú': 'u', 'Á': 'A', 'E': 'E', 'Í': 'I', 'Ó': 'O', 'Ú': 'U'}
 	for acen in acentos:
@@ -61,6 +62,7 @@ def limpiar_acentos(text):
 	return text
 
 class PlayerSpider(scrapy.Spider):
+    es_create_index_if_not_exists(es, 'matchplayer', mapping_player)
     name = 'players'
     start_urls = ['https://www.resultados-futbol.com/primera/grupo1/jornada1', 'https://www.resultados-futbol.com/primera_division_rfef/grupo1/jornada1']
 
@@ -93,6 +95,7 @@ class PlayerSpider(scrapy.Spider):
             print(res['result'])
 
 class MatchSpider(scrapy.Spider):
+    es_create_index_if_not_exists(es, 'match', mapping_match)
     contMatch = 0
     name = 'matchpoints'
     start_urls = ['https://www.resultados-futbol.com/primera/grupo1/jornada1', 'https://www.resultados-futbol.com/primera_division_rfef/grupo1/jornada1']
