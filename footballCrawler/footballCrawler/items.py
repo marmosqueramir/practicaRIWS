@@ -2,6 +2,7 @@ import scrapy
 
 
 class FootballScoreItem(scrapy.Item):
+    id = scrapy.Field()
     homeTeam = scrapy.Field()
     homeScore = scrapy.Field()
     homeShield = scrapy.Field()

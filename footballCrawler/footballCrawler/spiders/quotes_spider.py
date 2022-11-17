@@ -4,20 +4,22 @@ from footballCrawler.items import FootballPlayer
 from elasticsearch import Elasticsearch
 from elasticsearch.serializer import JSONSerializer
 from scrapy.utils.serialize import ScrapyJSONEncoder
-
+#http://localhost:9200/matchplayer/_search?from=0&size=50
+#http://localhost:9200/match/_search?from=0&size=200
 es = Elasticsearch([{'host': 'localhost', 'port': 9200, 'use_ssl': False}], http_auth=('elastic', 'elastic'), timeout=300)
 _encoder = ScrapyJSONEncoder()
 
 mapping_match = {
     "mappings": {
         "properties": {
+            "id": {"type": "text"},
             "homeTeam": {"type": "text"},
-            "homeScore": {"type": "integer"},
+            "homeScore": {"type": "text"},
             "homeShield": {"type": "text"},
             "awayTeam": {"type": "text"},
-            "awayScore": {"type": "integer"},
+            "awayScore": {"type": "text"},
             "awayShield": {"type": "text"},
-            "matchDay": {"type": "date"},
+            "matchDay": {"type": "text"},
             "matchSStadium": {"type": "text"},
             "league": {"type": "text"},
             "journey": {"type": "text"}
@@ -42,9 +44,14 @@ mapping_player = {
     }
 }
 cont = 0
+contMatch = 0
 es.indices.delete(index='matchplayer', ignore=[400, 404])
 es.indices.create(index = 'matchplayer', body = mapping_player)
 es.delete_by_query(index='matchplayer', body={"query": {"match_all": {}}})
+
+es.indices.delete(index='match', ignore=[400, 404])
+es.indices.create(index = 'match', body = mapping_match)
+es.delete_by_query(index='match', body={"query": {"match_all": {}}})
 def limpiar_acentos(text):
 	acentos = {'á': 'a', 'é': 'e', 'í': 'i', 'ó': 'o', 'ú': 'u', 'Á': 'A', 'E': 'E', 'Í': 'I', 'Ó': 'O', 'Ú': 'U'}
 	for acen in acentos:
@@ -85,6 +92,7 @@ class PlayerSpider(scrapy.Spider):
             print(res['result'])
 
 class MatchSpider(scrapy.Spider):
+    contMatch = 0
     name = 'matchpoints'
     start_urls = ['https://www.resultados-futbol.com/primera/grupo1/jornada1', 'https://www.resultados-futbol.com/primera_division_rfef/grupo1/jornada1']
 
@@ -104,6 +112,7 @@ class MatchSpider(scrapy.Spider):
                 yield from response.follow_all(pagination_links, self.parse)
 
     def parse_match(self, response):
+        global contMatch
         def extract_with_css_team(query):
             if(response.css(query).get() != '-'):
                 return response.css(query).get()
@@ -127,6 +136,7 @@ class MatchSpider(scrapy.Spider):
             return response.css(query).get()
 
         match_item = FootballScoreItem()
+        match_item['id'] = contMatch
         match_item['homeTeam']= extract_with_css_team('div.performers div.team.equipo1 h2 a b::text')
         match_item['homeScore']= extract_with_css_team('.claseR::text')
         match_item['homeShield']= extract_with_css_team('.team-logo img::attr(src)')
