@@ -22,7 +22,8 @@ mapping_match = {
             "matchDay": {"type": "text"},
             "matchSStadium": {"type": "text"},
             "league": {"type": "text"},
-            "journey": {"type": "text"}
+            "journey": {"type": "text"},
+            "referee": {"type": "text"}
         }
     }
 }
@@ -150,5 +151,10 @@ class MatchSpider(scrapy.Spider):
         match_item['matchResult']= extract_with_css_math_result('.claseR::text')
         match_item['league']= extract_with_css_league('div.microformat.itemscope ul a::text')
         match_item['journey']= extract_with_css_journey('.jornada a::text')
-        yield match_item
+        match_item['referee']= limpiar_acentos(str(extract_with_css_team('.referees td span.referee b::text')))
+
+        contMatch=contMatch+1
+
+        res = es.index(index='match', document=_encoder.encode(match_item), id=match_item['id'])
+        print(res['result'])
 
