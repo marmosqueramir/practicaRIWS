@@ -16,7 +16,7 @@ export class ElasticSearchPlayersApiService {
       'Content-type': 'application/json'
     });
     
-    return this._httpClient.post(this._elasticSearchUrl, JSON.stringify(this._getPlayerBody(league)), { headers });
+    return this._httpClient.post(this._elasticSearchUrl + "?from=0&size=30", JSON.stringify(this._getPlayerBody(league)), { headers });
   }
 
   getPlayersLeaguesAvailables(): Observable<Object> {
@@ -24,18 +24,24 @@ export class ElasticSearchPlayersApiService {
       'Content-type': 'application/json'
     });
 
-    return this._httpClient.post(this._elasticSearchUrl, JSON.stringify(this._getPlayerLeagueBody), { headers });
+    return this._httpClient.post(this._elasticSearchUrl + "?from=0&size=1000", JSON.stringify(this._getPlayerLeagueBody), { headers });
   }
 
   private _getPlayerLeagueBody(): any {
+    const compoSiteQuery= {
+      "size": 250,
+      "sources": [{
+        "terms": {
+          "field": "league"
+        }
+      }]
+    }
+    
     const requestBody = 
     {
-      "size": "0",
       "aggs": {
-          "uniq_gender": {
-              "terms": {
-                  "field": "league"
-              }
+          "values": {
+              "composite": compoSiteQuery
           }
       }
     }
