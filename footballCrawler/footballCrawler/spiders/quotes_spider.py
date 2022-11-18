@@ -97,7 +97,7 @@ class PlayerSpider(scrapy.Spider):
 class MatchSpider(scrapy.Spider):
     es_create_index_if_not_exists(es, 'match', mapping_match)
     contMatch = 0
-    name = 'matchpoints'
+    name = 'matchScores'
     start_urls = ['https://www.resultados-futbol.com/primera/grupo1/jornada1', 'https://www.resultados-futbol.com/primera_division_rfef/grupo1/jornada1']
 
     def parse(self, response):
@@ -141,19 +141,19 @@ class MatchSpider(scrapy.Spider):
 
         match_item = FootballScoreItem()
         match_item['id'] = contMatch
-        match_item['homeTeam']= extract_with_css_team('div.performers div.team.equipo1 h2 a b::text')
+        match_item['homeTeam']= limpiar_acentos(str(extract_with_css_team('div.performers div.team.equipo1 h2 a b::text')))
         match_item['homeScore']= extract_with_css_team('.claseR::text')
         match_item['homeShield']= extract_with_css_team('.team-logo img::attr(src)')
 
-        match_item['awayTeam']= extract_with_css_team('div.performers div.team.equipo2 h2 a b::text')
+        match_item['awayTeam']= limpiar_acentos(str(extract_with_css_team('div.performers div.team.equipo2 h2 a b::text')))
         match_item['awayScore']= extract_with_css_away_team_shield_and_score('.claseR::text')
         match_item['awayShield']= extract_with_css_away_team_shield_and_score('.team-logo img::attr(src)')
 
-        match_item['matchDay']= extract_with_css_team('div.with_info div.performers span.jor-date::text')
-        match_item['matchSStadium']= extract_with_css_team('.stadium b::text')
+        match_item['matchDay']= limpiar_acentos(str(extract_with_css_team('div.with_info div.performers span.jor-date::text')))
+        match_item['matchSStadium']= limpiar_acentos(str(extract_with_css_team('.stadium b::text')))
         match_item['matchResult']= extract_with_css_math_result('.claseR::text')
-        match_item['league']= extract_with_css_league('div.microformat.itemscope ul a::text')
-        match_item['journey']= extract_with_css_journey('.jornada a::text')
+        match_item['league']= limpiar_acentos(str(extract_with_css_league('div.microformat.itemscope ul a::text')))
+        match_item['journey']= limpiar_acentos(str(extract_with_css_journey('.jornada a::text')))
         match_item['referee']= limpiar_acentos(str(extract_with_css_team('.referees td span.referee b::text')))
 
         contMatch=contMatch+1
