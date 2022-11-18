@@ -1,9 +1,10 @@
 import scrapy
-from footballCrawler.items import FootballScoreItem
-from footballCrawler.items import FootballPlayer
 from elasticsearch import Elasticsearch
-from elasticsearch.serializer import JSONSerializer
 from scrapy.utils.serialize import ScrapyJSONEncoder
+
+from footballCrawler.items import FootballPlayer
+from footballCrawler.items import FootballScoreItem
+
 #http://localhost:9200/matchplayer/_search?from=0&size=50
 #http://localhost:9200/match/_search?from=0&size=200
 es = Elasticsearch([{'host': 'localhost', 'port': 9200, 'use_ssl': False}], http_auth=('elastic', 'elastic'), timeout=300)
