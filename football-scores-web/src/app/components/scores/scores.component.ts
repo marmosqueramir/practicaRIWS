@@ -39,30 +39,35 @@ export class ScoresComponent implements OnInit {
 
   ngOnInit(): void {
     this.resultForm.get('journey')?.disable();
-    this.availableLeagues = ['Primera Federación']
+    this.availableLeagues = ['Primera división', 'Primera Federación']
   }
 
   leagueSelected($event: any) {
     // Buscar las journeys con la liga que hayan seleccionado: $event.value
-    this.availableJourneys = ['Jornada 1', 'Jornada 2', 'Jornada 3']
+    this.availableJourneys = ['Jornada 1', 'Jornada 2', 'Jornada 3', 'Jornada 20']
 
     this.resultForm.get('journey')?.enable();
   }
 
   searchResults(league: String, journey: String) {
-    console.log(this.selectedJourney)
-    console.log(this.selectedLeague)
-
+    this.footballScoreItems = [];
     this._elasticSearchMatchScoresApiService.getMatchScoresByLeagueAndJourney(league, journey).subscribe((data: any) => {
       for(let x of data.hits.hits) {
         var match: FootballScoreItem = x._source;
         this.footballScoreItems.push(match);
       }
     });
-    //this.footballScoreItems.push(resultado1)
   }
 
   viewDetails(element: any): void {
 
+  }
+
+  isNull(result: String): String {
+    if (result == null) {
+      return "";
+    } else {
+      return result;
+    }
   }
 }

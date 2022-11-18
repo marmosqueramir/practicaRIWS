@@ -12,11 +12,18 @@ export class ElasticSearchMatchScoresApiService {
     constructor(protected _httpClient: HttpClient) {}
 
     getMatchScoresByLeagueAndJourney(league: String, journey: String): Observable<Object> {
-    const headers = new HttpHeaders({
+        const headers = new HttpHeaders({
         'Content-type': 'application/json'
         });
         
         return this._httpClient.post(this._elasticSearchUrl, JSON.stringify(this._getMatchBody(league, journey)), { headers });
+    }
+
+    getAvailableJourneysByLeague(league: string): Observable<Object> {
+        const headers = new HttpHeaders({
+            'Content-type': 'application/json'
+        });
+        return this._httpClient.post(this._elasticSearchUrl, JSON.stringify(this._getJourneyRequestBody(league)), { headers });
     }
 
     private _getMatchBody(league: String, journey: String): any {
@@ -41,5 +48,17 @@ export class ElasticSearchMatchScoresApiService {
         }
         
         return requestBody;
-      }
+    }
+
+    private _getJourneyRequestBody(league: String): any {
+        const requestBody = 
+        {
+            "_source": "journey",
+            "query": {
+                "league": league
+            }
+        }
+        
+        return requestBody;
+    }
 }

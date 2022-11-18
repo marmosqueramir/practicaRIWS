@@ -68,7 +68,7 @@
               Resultado
             </mat-header-cell>
             <mat-cell *matCellDef="let element">
-              {{ element.homeScore + '-' + element.awayScore }}
+              {{ isNull(element.homeScore) + '-' + isNull(element.awayScore) }}
             </mat-cell>
           </ng-container>
 
