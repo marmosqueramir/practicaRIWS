@@ -35,33 +35,17 @@ export class GoalScorerComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.availableLeagues = ['Española', 'Inglesa', 'Francesa']
+    this.availableLeagues = ['Primera Division']
   }
 
-  searchResults() {
-    var jugador: GoalScorerItems = {
-      ranking: 1,
-      name: 'Jorge Berbel',
-      goals: 339,
-      position : "DevOps",
-      teamName : "Deportivo",
-      league : "Española"
-    }
+  searchResults(leagueToSearch: String) {
 
-    var jugador2: GoalScorerItems = {
-      ranking: 2,
-      name : "Pablo",
-      goals : 200,
-      position : "DevOps",
-      teamName : "Deportivo",
-      league : "Española"
-    }
 
-    this._elasticSearchPlayersService.getPlayersLeagues();
-    this.goalScorerItems.push(jugador);
-    this.goalScorerItems.push(jugador2);
-    console.log(this.selectedLeague)
-    // asignar el valor a goalScorerItems
+    this._elasticSearchPlayersService.getPlayersLeagues(leagueToSearch).subscribe((data: any) => {
+      for(let x of data.hits.hits) {
+        var jugador: GoalScorerItems = x._source;
+        this.goalScorerItems.push(jugador);
+      }
+    });
   }
-
 }

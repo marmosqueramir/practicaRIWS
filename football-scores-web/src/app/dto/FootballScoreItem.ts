@@ -13,9 +13,10 @@ export interface FootballScoreItem {
 }
 
 export interface GoalScorerItems {
-    ranking: number;
+    id: number
+    ranking: String;
     name: String;
-    goals: number;
+    goals: String;
     position: String;
     teamName: String;
     league: String;

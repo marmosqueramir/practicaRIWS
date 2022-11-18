@@ -16,7 +16,7 @@
         </form>
 
         <!-- Botón para buscar -->
-        <button mat-raised-button color="primary" (click)="searchResults()" [disabled]="!selectedLeague"> Buscar </button>
+        <button mat-raised-button color="primary" (click)="searchResults(selectedLeague)" [disabled]="!selectedLeague"> Buscar </button>
 
         <!-- Datos de los goleadores -->
         <mat-card style="margin-top: 10px;" *ngIf="goalScorerItems.length > 0">

@@ -1,3 +1,4 @@
+import { Observable } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
@@ -10,23 +11,44 @@ export class ElasticSearchPlayersApiService {
 
   constructor(protected _httpClient: HttpClient) {}
 
-  getPlayersLeagues() {
+  getPlayersLeagues(league: String): Observable<Object> {
+    const headers = new HttpHeaders({
+      'Content-type': 'application/json'
+    });
+    
+    return this._httpClient.post(this._elasticSearchUrl, JSON.stringify(this._getPlayerBody(league)), { headers });
+  }
+
+  getPlayersLeaguesAvailables(): Observable<Object> {
     const headers = new HttpHeaders({
       'Content-type': 'application/json'
     });
 
-     //this._httpClient.post(this._elasticSearchUrl, JSON.stringify(this._getPlayerLeagueBody)).map((res: Response) => HttpHelperService.json(res));
-     return this._httpClient.post(this._elasticSearchUrl, JSON.stringify(this._getPlayerLeagueBody), { headers }).subscribe((data: any) => {
-      console.log(data);
-     });
+    return this._httpClient.post(this._elasticSearchUrl, JSON.stringify(this._getPlayerLeagueBody), { headers });
   }
 
   private _getPlayerLeagueBody(): any {
     const requestBody = 
+    {
+      "size": "0",
+      "aggs": {
+          "uniq_gender": {
+              "terms": {
+                  "field": "league"
+              }
+          }
+      }
+    }
+    
+    return requestBody;
+  }
+
+  private _getPlayerBody(league: String): any {
+    const requestBody = 
       {
         "query": {
           "match": {
-              "league": "Primera Division"
+              "league": league
           }
         }
       }
