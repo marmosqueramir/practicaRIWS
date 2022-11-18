@@ -5,11 +5,14 @@ services:
     image: elasticsearch:8.4.1
     environment:
         # Un único nodo (no vamos a replicar la información)
-      - discovery.type=single-node
+        - discovery.type=single-node
         # Memoria minima y maxima
-      - ES_JAVA_OPTS=-Xms1g -Xmx1g
-      - xpack.security.enabled=true
-      - ELASTIC_PASSWORD=elastic
+        - xpack.security.enabled=false
+        - http.cors.allow-origin="*"
+        - http.cors.allow-methods=OPTIONS,HEAD,GET,POST,PUT,DELETE
+        - http.cors.enabled=true
+        - http.cors.allow-headers=X-Requested-With,X-Auth-Token,Content-Type,Content-Length,Authorization
+        - http.cors.allow-credentials=true
     volumes:
         # Montamos le volumen de datos
       - es_data:/usr/share/elasticsearch/data

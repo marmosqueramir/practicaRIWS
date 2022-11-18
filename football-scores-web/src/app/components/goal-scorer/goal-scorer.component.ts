@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { GoalScorerItems } from 'src/app/dto/FootballScoreItem';
+import { ElasticSearchPlayersApiService } from 'src/app/services/elastic-search-players-api.service';
 
 @Component({
   selector: 'app-goal-scorer',
@@ -29,7 +30,8 @@ export class GoalScorerComponent implements OnInit {
   ];
 
   constructor(
-    private _fb: FormBuilder
+    private _fb: FormBuilder,
+    private _elasticSearchPlayersService: ElasticSearchPlayersApiService
   ) { }
 
   ngOnInit(): void {
@@ -55,6 +57,7 @@ export class GoalScorerComponent implements OnInit {
       league : "Española"
     }
 
+    this._elasticSearchPlayersService.getPlayersLeagues();
     this.goalScorerItems.push(jugador);
     this.goalScorerItems.push(jugador2);
     console.log(this.selectedLeague)

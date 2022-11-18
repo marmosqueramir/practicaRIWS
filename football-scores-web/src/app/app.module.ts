@@ -14,6 +14,8 @@ import { GoalScorerComponent } from './components/goal-scorer/goal-scorer.compon
 import { MatTableModule } from '@angular/material/table';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
+import { ElasticSearchPlayersApiService } from './services/elastic-search-players-api.service';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -33,9 +35,10 @@ import { MatIconModule } from '@angular/material/icon';
     MatSelectModule,
     MatTableModule,
     MatCardModule,
-    MatIconModule
+    MatIconModule,
+    HttpClientModule,
   ],
-  providers: [],
+  providers: [ElasticSearchPlayersApiService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

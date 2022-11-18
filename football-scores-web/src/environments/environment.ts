@@ -5,8 +5,7 @@
 export const environment = {
   production: false,
   host: 'http://localhost:9200',
-  indexScores: '',
-  indexGoalScorers: ''
+  playerIndexName: 'player',
 };
 
 /*
