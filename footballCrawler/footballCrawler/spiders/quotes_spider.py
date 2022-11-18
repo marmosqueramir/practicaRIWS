@@ -13,18 +13,19 @@ _encoder = ScrapyJSONEncoder()
 mapping_match = {
     "mappings": {
         "properties": {
-            "id": {"type": "text"},
-            "homeTeam": {"type": "text"},
-            "homeScore": {"type": "text"},
-            "homeShield": {"type": "text"},
-            "awayTeam": {"type": "text"},
-            "awayScore": {"type": "text"},
-            "awayShield": {"type": "text"},
-            "matchDay": {"type": "text"},
-            "matchSStadium": {"type": "text"},
-            "league": {"type": "text"},
-            "journey": {"type": "text"},
-            "referee": {"type": "text"}
+            "id": {"type": "keyword"},
+            "homeTeam": {"type": "keyword"},
+            "homeScore": {"type": "keyword"},
+            "homeShield": {"type": "keyword"},
+            "awayTeam": {"type": "keyword"},
+            "awayScore": {"type": "keyword"},
+            "awayShield": {"type": "keyword"},
+            "matchDay": {"type": "keyword"},
+            "matchSStadium": {"type": "keyword"},
+            "league": {"type": "keyword"},
+            "journey": {"type": "keyword"},
+            "referee": {"type": "keyword"}
+
         }
     }
 }
@@ -35,19 +36,26 @@ mapping_player = {
     },
     "mappings": {
         "properties": {
-            "id": {"type": "text"},
-            "ranking": {"type": "text"},
-            "name": {"type": "text"},
-            "goals": {"type": "text"},
-            "position": {"type": "text"},
-            "teamName": {"type": "text"},
-            "league": {"type": "text"}
+            "id": {"type": "keyword"},
+            "ranking": {"type": "keyword"},
+            "name": {"type": "keyword"},
+            "goals": {"type": "keyword"},
+            "position": {"type": "keyword"},
+            "teamName": {"type": "keyword"},
+            "league": {"type": "keyword"}
         }
     }
 }
+    
 cont = 0
 contMatch = 0
+# es.indices.delete(index='matchplayer', ignore=[400, 404])
+# es.indices.create(index = 'matchplayer', body = mapping_player)
+# es.delete_by_query(index='matchplayer', body={"query": {"match_all": {}}})
 
+# es.indices.delete(index='match', ignore=[400, 404])
+# es.indices.create(index = 'match', body = mapping_match)
+# es.delete_by_query(index='match', body={"query": {"match_all": {}}})
 def es_create_index_if_not_exists(es, index, mapping):
     
     if es.indices.exists(index=index):
@@ -72,16 +80,6 @@ class PlayerSpider(scrapy.Spider):
         league = response.css('div.clearfix div.titular-data h1::text').get()
         for player in response.css("div.gridPlayers tr.fila"):
             football_player = FootballPlayer()
-            #other option
-            doc =  {
-                'id': str(cont),
-                'ranking' : player.css('td::text').get(),
-                'name' : player.css('td a::text').get(),
-                'goals' : player.css('td strong::text').get(),
-                'position' : player.css('td.role::text').get(),
-                'teamName' : player.css('td.esp a::text').get(),
-                'league' : league
-            }
             football_player['id'] = cont
             football_player['ranking'] = player.css('td::text').get()
             football_player['name'] = limpiar_acentos(player.css('td a::text').get())
@@ -91,7 +89,6 @@ class PlayerSpider(scrapy.Spider):
             football_player['league'] = limpiar_acentos(league)
             cont=cont+1
 
-            #yield football_player
             res = es.index(index='matchplayer', document=_encoder.encode(football_player), id=football_player['id'])
             print(res['result'])
 
