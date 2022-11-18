@@ -1,0 +1,36 @@
+<h1 style="text-align: center;"> Detalles del partido </h1>
+<div class="container" style="width: 100%; text-align: center;">
+    <div class="column">
+        <!-- Datos de los partidos -->
+        <mat-card style="margin-top: 10px;" *ngIf="columnsValue.length > 0">
+            <mat-table
+            [dataSource]="columnsValue"
+            matSort
+            class="items-table">
+
+          <!-- Estadio -->
+          <ng-container matColumnDef="stadium">
+            <mat-header-cell id="stadium" mat-sort-header *matHeaderCellDef>
+              Estadio
+            </mat-header-cell>
+            <mat-cell *matCellDef="let element">
+              {{ element?.matchSStadium }}
+            </mat-cell>
+          </ng-container>
+
+          <!-- Estadio -->
+          <ng-container matColumnDef="referee">
+            <mat-header-cell id="referee" mat-sort-header *matHeaderCellDef>
+              Árbitro
+            </mat-header-cell>
+            <mat-cell *matCellDef="let element">
+              {{ element?.referee }}
+            </mat-cell>
+          </ng-container>
+
+          <mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></mat-header-row>
+          <mat-row *matRowDef="let row; columns: displayedColumns" class="item" matRipple></mat-row>
+          </mat-table>
+        </mat-card>
+    </div>
+</div>

@@ -7,10 +7,11 @@ export interface FootballScoreItem {
     awayScore: String;
     awayShield: String;
     matchDay?: Date;
-    matchStadium?: String;
+    matchSStadium?: String;
     matchResult?: String;
     league: String;
     journey: String;
+    referee: String;
 }
 
 export interface GoalScorerItems {

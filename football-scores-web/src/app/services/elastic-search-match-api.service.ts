@@ -23,7 +23,14 @@ export class ElasticSearchMatchScoresApiService {
         const headers = new HttpHeaders({
             'Content-type': 'application/json'
         });
-        return this._httpClient.post(this._elasticSearchUrl, JSON.stringify(this._getJourneyRequestBody(league)), { headers });
+        return this._httpClient.post(this._elasticSearchUrl + "?from=0&size=1000", JSON.stringify(this._getJourneyRequestBody(league)), { headers });
+    }
+
+    getMatchScoreById(id: number): Observable<Object> {
+        const headers = new HttpHeaders({
+            'Content-type': 'application/json'
+        });
+        return this._httpClient.get<Object>(environment.host + environment.matchIndexName + "/_doc/" + id);
     }
 
     private _getMatchBody(league: String, journey: String): any {
@@ -51,14 +58,36 @@ export class ElasticSearchMatchScoresApiService {
     }
 
     private _getJourneyRequestBody(league: String): any {
-        const requestBody = 
+        const requestBody =
         {
             "_source": "journey",
             "query": {
-                "league": league
+                "match": {
+                    "league": league
+                }
             }
         }
-        
         return requestBody;
     }
+
+    getMatchLeaguesAvailables(): Observable<Object> {
+        const headers = new HttpHeaders({
+          'Content-type': 'application/json'
+        });
+        return this._httpClient.post(this._elasticSearchUrl + "?from=0&size=1000", JSON.stringify(this._getMatchLeagueBody), { headers });
+      }
+      private _getMatchLeagueBody(): any {
+        const requestBody =
+        {
+          "size": "0",
+          "aggs": {
+              "uniq_gender": {
+                  "terms": {
+                      "field": "league"
+                  }
+              }
+          }
+        }
+        return requestBody;
+      }
 }

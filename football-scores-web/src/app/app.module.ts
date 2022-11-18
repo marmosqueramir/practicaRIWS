@@ -16,13 +16,15 @@ import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { ElasticSearchPlayersApiService } from './services/elastic-search-players-api.service';
 import { HttpClientModule } from '@angular/common/http';
+import { ScoresDetailComponent } from './components/scores-detail/scores-detail.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     ScoresComponent,
     NavbarComponent,
-    GoalScorerComponent
+    GoalScorerComponent,
+    ScoresDetailComponent
   ],
   imports: [
     BrowserModule,

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { FootballScoreItem } from 'src/app/dto/FootballScoreItem';
 import { ElasticSearchMatchScoresApiService } from 'src/app/services/elastic-search-match-api.service';
 
@@ -35,7 +36,8 @@ export class ScoresComponent implements OnInit {
 
   constructor(
     private _fb: FormBuilder,
-    private _elasticSearchMatchScoresApiService: ElasticSearchMatchScoresApiService
+    private _elasticSearchMatchScoresApiService: ElasticSearchMatchScoresApiService,
+    private _router: Router,
   ) { }
 
   ngOnInit(): void {
@@ -61,8 +63,8 @@ export class ScoresComponent implements OnInit {
     });
   }
 
-  viewDetails(element: any): void {
-
+  viewDetails(element: FootballScoreItem): void {
+    this._router.navigate([element.id]);
   }
 
   isNull(result: String): String {

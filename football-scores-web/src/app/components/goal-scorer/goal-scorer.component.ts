@@ -35,13 +35,6 @@ export class GoalScorerComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    // this._elasticSearchPlayersService.getPlayersLeaguesAvailables().subscribe((data: any) => {
-    //   for(let league of data.hits.hits) {
-    //     var leagueValue: String = league._source;
-    //     this.availableLeagues.push(leagueValue);
-    //   }
-    // });
-
     this._elasticSearchPlayersService.getPlayersLeaguesAvailables().subscribe((data: any) => {
       this.goalScorerItems = []
       for(let player of data.hits.hits) {
