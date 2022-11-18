@@ -40,7 +40,7 @@ export class ScoresComponent implements OnInit {
 
   ngOnInit(): void {
     this.resultForm.get('journey')?.disable();
-    this.availableLeagues = ['Primera división', 'Primera Federación']
+    this.availableLeagues = ['Primera Division', 'Primera Federacion']
   }
 
   leagueSelected($event: any) {

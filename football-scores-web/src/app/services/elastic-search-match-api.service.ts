@@ -7,7 +7,7 @@ import { environment } from "src/environments/environment";
     providedIn: 'root',
 })
 export class ElasticSearchMatchScoresApiService {
-    private _elasticSearchUrl: string = environment.host + environment.matchIndexName+ "/_search";
+    private _elasticSearchUrl: string = environment.host + environment.matchIndexName + "/_search";
     
     constructor(protected _httpClient: HttpClient) {}
 
