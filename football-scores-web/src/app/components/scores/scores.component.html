@@ -28,6 +28,11 @@
         <!-- Botón para buscar -->
         <button mat-raised-button color="primary" (click)="searchResults(selectedLeague, selectedJourney)" [disabled]="!selectedLeague || !selectedJourney"> Buscar </button>
 
+        <mat-card style="margin-top: 10px;" *ngIf="footballScoreItems.length === 0 && searchExecuted === true">
+          <h1>NO DATA AVAILABLE</h1>
+           <!-- <img [src]="imagePath" alt="No data">  -->
+        </mat-card>
+
         <!-- Datos de los partidos -->
         <mat-card style="margin-top: 10px;" *ngIf="footballScoreItems.length > 0">
             <mat-table

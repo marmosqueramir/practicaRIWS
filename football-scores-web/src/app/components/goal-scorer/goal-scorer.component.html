@@ -18,6 +18,11 @@
         <!-- Botón para buscar -->
         <button mat-raised-button color="primary" (click)="searchResults(selectedLeague)" [disabled]="!selectedLeague"> Buscar </button>
 
+        <mat-card style="margin-top: 10px;" *ngIf="goalScorerItems.length === 0 && searchExecuted === true">
+          <h1>NO DATA AVAILABLE</h1>
+           <!-- <img [src]="imagePath" alt="No data">  -->
+        </mat-card>
+
         <!-- Datos de los goleadores -->
         <mat-card style="margin-top: 10px;" *ngIf="goalScorerItems.length > 0">
             <mat-table

@@ -18,7 +18,7 @@ export class GoalScorerComponent implements OnInit {
 
   selectedLeague: any = undefined;
   availableLeagues: String[] = [];
-
+  searchExecuted: boolean = false;
   goalScorerItems: GoalScorerItems[] = [];
 
   displayedColumns: string[] = [
@@ -35,14 +35,28 @@ export class GoalScorerComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.availableLeagues = ['Primera Division']
+    // this._elasticSearchPlayersService.getPlayersLeaguesAvailables().subscribe((data: any) => {
+    //   for(let league of data.hits.hits) {
+    //     var leagueValue: String = league._source;
+    //     this.availableLeagues.push(leagueValue);
+    //   }
+    // });
+
+    this._elasticSearchPlayersService.getPlayersLeaguesAvailables().subscribe((data: any) => {
+      this.goalScorerItems = []
+      for(let player of data.hits.hits) {
+        var jugador: GoalScorerItems = player._source;
+        if (this.availableLeagues.indexOf(jugador.league) == -1) {
+          this.availableLeagues.push(jugador.league);
+        }
+      }
+    });
   }
 
   searchResults(leagueToSearch: String) {
-
-
+    this.searchExecuted = true;
+    this.goalScorerItems = []
     this._elasticSearchPlayersService.getPlayersByLeague(leagueToSearch).subscribe((data: any) => {
-      this.goalScorerItems = []
       for(let player of data.hits.hits) {
         var jugador: GoalScorerItems = player._source;
         this.goalScorerItems.push(jugador);

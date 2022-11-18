@@ -23,6 +23,7 @@ export class ScoresComponent implements OnInit {
   availableJourneys: String[] = [];
 
   footballScoreItems: FootballScoreItem[] = [];
+  searchExecuted: boolean = false;
 
   displayedColumns: string[] = [
     'matchDay',
@@ -50,6 +51,7 @@ export class ScoresComponent implements OnInit {
   }
 
   searchResults(league: String, journey: String) {
+    this.searchExecuted = true;
     this.footballScoreItems = [];
     this._elasticSearchMatchScoresApiService.getMatchScoresByLeagueAndJourney(league, journey).subscribe((data: any) => {
       for(let x of data.hits.hits) {
