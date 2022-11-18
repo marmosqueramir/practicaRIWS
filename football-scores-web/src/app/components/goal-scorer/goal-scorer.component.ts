@@ -41,7 +41,7 @@ export class GoalScorerComponent implements OnInit {
   searchResults(leagueToSearch: String) {
 
 
-    this._elasticSearchPlayersService.getPlayersLeagues(leagueToSearch).subscribe((data: any) => {
+    this._elasticSearchPlayersService.getPlayersByLeague(leagueToSearch).subscribe((data: any) => {
       for(let x of data.hits.hits) {
         var jugador: GoalScorerItems = x._source;
         this.goalScorerItems.push(jugador);

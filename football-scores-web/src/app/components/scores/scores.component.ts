@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { FootballScoreItem } from 'src/app/dto/FootballScoreItem';
+import { ElasticSearchMatchScoresApiService } from 'src/app/services/elastic-search-match-api.service';
 
 @Component({
   selector: 'app-scores',
@@ -32,12 +33,13 @@ export class ScoresComponent implements OnInit {
   ];
 
   constructor(
-    private _fb: FormBuilder
+    private _fb: FormBuilder,
+    private _elasticSearchMatchScoresApiService: ElasticSearchMatchScoresApiService
   ) { }
 
   ngOnInit(): void {
     this.resultForm.get('journey')?.disable();
-    this.availableLeagues = ['Española', 'Inglesa', 'Francesa']
+    this.availableLeagues = ['Primera Federación']
   }
 
   leagueSelected($event: any) {
@@ -47,40 +49,17 @@ export class ScoresComponent implements OnInit {
     this.resultForm.get('journey')?.enable();
   }
 
-  searchResults() {
+  searchResults(league: String, journey: String) {
     console.log(this.selectedJourney)
     console.log(this.selectedLeague)
-    var resultado1: FootballScoreItem = {
-      homeTeam: 'Barcelona',
-      homeScore: 0,
-      homeShield: 'https://t.resfu.com/img_data/escudos/small/429.jpg?size=37x&5',
-      awayTeam: 'Madrid',
-      awayScore: 2,
-      awayShield: 'https://t.resfu.com/img_data/escudos/small/429.jpg?size=37x&5',
-      matchDay: undefined,
-      matchStadium: undefined,
-      matchResult: undefined,
-      league: 'Española',
-      journey: 'Jornada 1'
-    }
-    var resultado2: FootballScoreItem = {
-      homeTeam: 'Barcelona',
-      homeScore: 0,
-      homeShield: 'https://t.resfu.com/img_data/escudos/small/429.jpg?size=37x&5',
-      awayTeam: 'Madrid',
-      awayScore: 2,
-      awayShield: 'https://t.resfu.com/img_data/escudos/small/429.jpg?size=37x&5',
-      matchDay: undefined,
-      matchStadium: undefined,
-      matchResult: undefined,
-      league: 'Española',
-      journey: 'Jornada 1'
-    }
 
-    this.footballScoreItems.push(resultado1)
-    this.footballScoreItems.push(resultado2);
-    // asignar el valor a footballScoreItems
-
+    this._elasticSearchMatchScoresApiService.getMatchScoresByLeagueAndJourney(league, journey).subscribe((data: any) => {
+      for(let x of data.hits.hits) {
+        var match: FootballScoreItem = x._source;
+        this.footballScoreItems.push(match);
+      }
+    });
+    //this.footballScoreItems.push(resultado1)
   }
 
   viewDetails(element: any): void {

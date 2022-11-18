@@ -26,7 +26,7 @@
         </form>
 
         <!-- Botón para buscar -->
-        <button mat-raised-button color="primary" (click)="searchResults()" [disabled]="!selectedLeague || !selectedJourney"> Buscar </button>
+        <button mat-raised-button color="primary" (click)="searchResults(selectedLeague, selectedJourney)" [disabled]="!selectedLeague || !selectedJourney"> Buscar </button>
 
         <!-- Datos de los partidos -->
         <mat-card style="margin-top: 10px;" *ngIf="footballScoreItems.length > 0">

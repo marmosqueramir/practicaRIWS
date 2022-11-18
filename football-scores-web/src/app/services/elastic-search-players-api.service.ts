@@ -7,11 +7,11 @@ import { environment } from 'src/environments/environment';
     providedIn: 'root',
 })
 export class ElasticSearchPlayersApiService {
-  private _elasticSearchUrl: string = environment.host + "player/_search"; 
+  private _elasticSearchUrl: string = environment.host + environment.playerIndexName + "/_search"; 
 
   constructor(protected _httpClient: HttpClient) {}
 
-  getPlayersLeagues(league: String): Observable<Object> {
+  getPlayersByLeague(league: String): Observable<Object> {
     const headers = new HttpHeaders({
       'Content-type': 'application/json'
     });

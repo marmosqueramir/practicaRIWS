@@ -1,9 +1,10 @@
 export interface FootballScoreItem {
+    id: number;
     homeTeam: String;
-    homeScore?: number;
+    homeScore?: String;
     homeShield: String;
     awayTeam: String;
-    awayScore: number;
+    awayScore: String;
     awayShield: String;
     matchDay?: Date;
     matchStadium?: String;
