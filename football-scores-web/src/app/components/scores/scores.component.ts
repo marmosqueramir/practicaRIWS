@@ -42,12 +42,27 @@ export class ScoresComponent implements OnInit {
 
   ngOnInit(): void {
     this.resultForm.get('journey')?.disable();
-    this.availableLeagues = ['Primera Division', 'Primera Federacion']
+    this._elasticSearchMatchScoresApiService.getMatchLeaguesAvailables().subscribe((data: any) => {
+      this.footballScoreItems = []
+      for (let match of data.hits.hits) {
+        var matchItem: FootballScoreItem = match._source;
+        if (this.availableLeagues.indexOf(matchItem.league) == -1) {
+          this.availableLeagues.push(matchItem.league);
+        }
+      }
+    });
   }
 
   leagueSelected($event: any) {
     // Buscar las journeys con la liga que hayan seleccionado: $event.value
-    this.availableJourneys = ['Jornada 1', 'Jornada 2', 'Jornada 3', 'Jornada 20']
+    this._elasticSearchMatchScoresApiService.getAvailableJourneysByLeague(this.selectedLeague).subscribe((data: any) => {
+      for (let match of data.hits.hits) {
+        var matchItem: FootballScoreItem = match._source;
+        if (this.availableJourneys.indexOf(matchItem.journey) == -1) {
+          this.availableJourneys.push(matchItem.journey);
+        }
+      }
+    });
 
     this.resultForm.get('journey')?.enable();
   }

@@ -5,8 +5,7 @@ import { ElasticSearchPlayersApiService } from 'src/app/services/elastic-search-
 
 @Component({
   selector: 'app-goal-scorer',
-  templateUrl: './goal-scorer.component.html',
-  styleUrls: ['./goal-scorer.component.scss']
+  templateUrl: './goal-scorer.component.html'
 })
 export class GoalScorerComponent implements OnInit {
 
